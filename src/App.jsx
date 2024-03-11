@@ -1,6 +1,7 @@
 import "./App.css";
 import Navbar from "./Components/Navbar";
 import Continents from "./Components/Continents";
+import Parent from "./Components/Parent";
 
 function App() {
   return (
@@ -8,7 +9,7 @@ function App() {
       <Navbar />
       <br />
       <br />
-      <Continents />
+      <Parent />
     </>
   );
 }

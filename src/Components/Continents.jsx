@@ -1,22 +1,7 @@
 import React, { useState } from "react";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 
-function Continents() {
-  const [selectedContinent, setSeclectedContinent] = useState("");
-  var continentsList = [
-    "Asia",
-    "Africa",
-    "North Africa",
-    "South Africa",
-    "Antarctica",
-    "Europe",
-    "Austrialia",
-  ];
-
-  function handleChange(event) {
-    console.log(event.target.value);
-    setSeclectedContinent(event.target.value);
-  }
+function Continents({ continentsList, selectedContinent, handleChange }) {
   return (
     <>
       <FormControl fullWidth>
@@ -28,14 +13,7 @@ function Continents() {
           label="Continent"
           onChange={handleChange}
         >
-          {/* <MenuItem value={"Asia"}>Asia</MenuItem>
-          <MenuItem value={"Africa"}>Africa</MenuItem>
-          <MenuItem value={"North America"}>North America</MenuItem>
-          <MenuItem value={"South America"}>South America</MenuItem>
-          <MenuItem value={"Antarctica"}>Antarctica</MenuItem>
-          <MenuItem value={"Europe"}>Europe</MenuItem>
-          <MenuItem value={"Australia"}>Australia</MenuItem> */}
-          {continentsList.map(function (continentName, index) {
+          {continentsList.map((continentName) => {
             return (
               <MenuItem value={continentName} key={continentName}>
                 {continentName}
