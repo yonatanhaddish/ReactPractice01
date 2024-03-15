@@ -1,15 +1,27 @@
 import "./App.css";
 import Navbar from "./Components/Navbar";
 import Continents from "./Components/Continents";
-import Parent from "./Components/Parent";
+import Parent from "./Components/CollapsibleTable";
+import CollapsibleTable from "./Components/CollapsibleTable";
+import FullFeaturedCrudGrid from "./Components/CollapsibleTable";
+import CollapsibleTableTest from "./Components/CollapsibleTableTest";
 
 function App() {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <br />
       <br />
-      <Parent />
+      {/* <Parent /> */}
+      <br />
+      <br />
+      <CollapsibleTable />
+
+      {/* <FullFeaturedCrudGrid /> */}
+
+      <br />
+      <br />
+      {/* <CollapsibleTableTest></CollapsibleTableTest> */}
     </>
   );
 }
