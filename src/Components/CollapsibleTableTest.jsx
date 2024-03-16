@@ -1,31 +1,26 @@
 import React, { useState } from "react";
+import { Button, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-
-const MyDataGrid = ({ rows, columns, onCellClick }) => {
-  return (
-    <div style={{ height: 400, width: "100%" }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5, 10, 20]}
-        checkboxSelection
-        disableSelectionOnClick
-        onCellClick={onCellClick}
-      />
-    </div>
-  );
-};
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 const CollapsibleTableTest = () => {
+  const [expandedRowId, setExpandedRowId] = useState(null);
   const [selectedRow, setSelectedRow] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const handleToggleExpand = (rowId) => {
+    if (expandedRowId === rowId) {
+      setExpandedRowId(null);
+    } else {
+      setExpandedRowId(rowId);
+    }
+  };
+
   const handleCellClick = (params) => {
-    if (params.field === "age") {
+    if (params.field === "id") {
+      handleToggleExpand(params.row.id);
+    } else if (params.field === "test-type") {
       setSelectedRow(params.row);
       setIsModalOpen(true);
     }
@@ -35,68 +30,61 @@ const CollapsibleTableTest = () => {
     setIsModalOpen(false);
   };
 
+  // Define your columns and rows here
   const columns = [
-    { field: "id", headerName: "ID", width: 70 },
-    { field: "firstName", headerName: "First Name", width: 130 },
-    { field: "lastName", headerName: "Last Name", width: 130 },
-    { field: "age", headerName: "Age", type: "number", width: 90 },
-    { field: "email", headerName: "Email", width: 200 },
+    { field: "id", headerName: "ID", width: 90 },
+    { field: "name", headerName: "Name", width: 150, editable: true },
+    {
+      field: "age",
+      headerName: "Age",
+      type: "number",
+      width: 110,
+      editable: true,
+    },
+    { field: "test-type", headerName: "Test Type", width: 150 },
   ];
 
   const rows = [
-    {
-      id: 1,
-      firstName: "John",
-      lastName: "Doe",
-      age: 35,
-      email: "john.doe@example.com",
-    },
-    {
-      id: 2,
-      firstName: "Jane",
-      lastName: "Doe",
-      age: 32,
-      email: "jane.doe@example.com",
-    },
-    {
-      id: 3,
-      firstName: "Andy",
-      lastName: "Smith",
-      age: 28,
-      email: "andy.smith@example.com",
-    },
-    // Add more rows as needed
+    { id: 1, name: "John Doe", age: 30, "test-type": "Type A" },
+    { id: 2, name: "Jane Smith", age: 25, "test-type": "Type B" },
+    { id: 3, name: "Alice Johnson", age: 35, "test-type": "Type C" },
+    { id: 4, name: "Bob Brown", age: 40, "test-type": "Type A" },
   ];
 
+  const expandedRowContent = (
+    <div>
+      {/* Your expanded row content here */}
+      <p>This is the expanded row content.</p>
+    </div>
+  );
+
   return (
-    <div style={{ height: 400, width: "100%" }}>
-      <MyDataGrid rows={rows} columns={columns} onCellClick={handleCellClick} />
-      <Modal
-        open={isModalOpen}
-        onClose={handleCloseModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            bgcolor: "background.paper",
-            border: "20px solid #000",
-            boxShadow: 24,
-            p: 4,
-          }}
-        >
-          <h2 id="modal-modal-title">Selected Row</h2>
-          <p id="modal-modal-description">
-            First Name: {selectedRow?.firstName}
-          </p>
-          <Button onClick={handleCloseModal}>Close</Button>
-        </Box>
-      </Modal>
+    <div>
+      <Dialog open={isModalOpen} onClose={handleCloseModal}>
+        <DialogTitle>Modal Title</DialogTitle>
+        <DialogContent>
+          {/* Your modal content here */}
+          <p>This is the modal content.</p>
+        </DialogContent>
+      </Dialog>
+      <div style={{ height: 400, width: "100%" }}>
+        <DataGrid rows={rows} columns={columns} onCellClick={handleCellClick}>
+          {(params) => (
+            <Button onClick={() => handleToggleExpand(params.row.id)}>
+              {expandedRowId === params.row.id ? (
+                <ExpandLessIcon />
+              ) : (
+                <ExpandMoreIcon />
+              )}
+            </Button>
+          )}
+          {(params) => (
+            <div style={{ backgroundColor: "#f5f5f5", padding: "10px" }}>
+              {expandedRowId === params.row.id && expandedRowContent}
+            </div>
+          )}
+        </DataGrid>
+      </div>
     </div>
   );
 };

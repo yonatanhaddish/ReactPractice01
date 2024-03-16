@@ -8,13 +8,17 @@ import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Close";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { Modal } from "@mui/material";
+import { Modal, Paper } from "@mui/material";
 import { TableRow } from "@material-ui/core";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { Stack, ListItemButton, ListItemText } from "@mui/material";
+import AccordionActions from "@mui/material/AccordionActions";
+import { Chip } from "@mui/material";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
+
 import {
   GridRowModes,
   DataGrid,
@@ -171,9 +175,11 @@ function CollapsibleTable() {
     setCollapseRow(collapseRow === rowId ? null : rowId);
   };
   function renderCellDynamic(params) {
-    const [isExpanded, setIsExpanded] = React.useState(params.row.expanded);
+    const [isExpanded, setIsExpanded] = React.useState(false);
     function handleToggleIcon() {
+      console.log(params);
       setIsExpanded(!isExpanded);
+      console.log(params.hasFocus);
     }
 
     return (
@@ -185,13 +191,17 @@ function CollapsibleTable() {
     );
   }
   function handleCellClick(params) {
+    // setIsExpanded(isExpanded);
     if (params.field === "test-type") {
       setSelectedRow(params.row);
       setIsModalOpen(true);
+      setIsExpanded(!isExpanded);
     }
   }
-  const handleCloseModal = () => {
+  const handleCloseModal = (params) => {
     setIsModalOpen(false);
+    // setIsExpanded(true);
+    // setIsExpanded(false);
   };
 
   const columns = [
@@ -245,14 +255,14 @@ function CollapsibleTable() {
     //   width: 180,
     //   editable: true,
     // },
-    // {
-    //   field: "role",
-    //   headerName: "Department",
-    //   width: 220,
-    //   editable: true,
-    //   type: "singleSelect",
-    //   valueOptions: ["Market", "Finance", "Development"],
-    // },
+    {
+      field: "role",
+      headerName: "Department",
+      width: 220,
+      editable: true,
+      type: "singleSelect",
+      valueOptions: ["Market", "Finance", "Development"],
+    },
     {
       field: "actions",
       type: "actions",
@@ -321,8 +331,26 @@ function CollapsibleTable() {
           }}
         />
       </Box> */}
-      <div style={{ height: 400, width: "100%" }}>
-        <DataGrid rows={rows} columns={columns} onCellClick={handleCellClick} />
+
+      <div
+        style={{
+          height: "100%",
+          width: "80%",
+          border: "2px solid white",
+          textAlign: "center",
+        }}
+      >
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          onCellClick={handleCellClick}
+          slots={{
+            toolbar: EditToolbar,
+          }}
+          slotProps={{
+            toolbar: { setRows, setRowModesModel },
+          }}
+        />
         <Modal
           open={isModalOpen}
           onClose={handleCloseModal}
@@ -332,21 +360,21 @@ function CollapsibleTable() {
           <Box
             sx={{
               position: "absolute",
+              height: 20,
+              width: "50%",
               top: "50%",
               left: "50%",
+              bgcolor: "white",
               transform: "translate(-50%, -50%)",
-              width: 400,
-              bgcolor: "background.paper",
-              border: "2px solid #000",
+              border: "solid 1px",
+              borderRadius: "10px",
               boxShadow: 24,
-              p: 4,
+
+              p: 2,
             }}
           >
-            <h2 id="modal-modal-title">Selected Row</h2>
-            <p id="modal-modal-description">
-              First Name: {selectedRow?.mapping_id}
-            </p>
-            <Button onClick={handleCloseModal}>Close</Button>
+            <Chip label="Chip Filled" />
+            {/* <Button onClick={handleCloseModal}>Close</Button> */}
           </Box>
         </Modal>
       </div>
