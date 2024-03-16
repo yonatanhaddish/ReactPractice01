@@ -35,6 +35,7 @@ import {
 } from "@mui/x-data-grid-generator";
 
 const roles = ["Market", "Finance", "Development"];
+const test_type_array = ["Test01", "Test02", "Test03"];
 const randomRole = () => {
   return randomArrayItem(roles);
 };
@@ -82,30 +83,6 @@ const initialRows = [
   },
 ];
 
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
-
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [
-      ...oldRows,
-      { id, name: "", age: "", role: "Market", isNew: true },
-    ]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
-    }));
-  };
-
-  return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
-  );
-}
-
 function CollapsibleTable() {
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState({});
@@ -116,6 +93,29 @@ function CollapsibleTable() {
 
   const [selectedRow, setSelectedRow] = React.useState(null);
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  function EditToolbar(props) {
+    const { setRows, setRowModesModel } = props;
+
+    const handleClick = () => {
+      const id = randomId();
+      setRows((oldRows) => [
+        ...oldRows,
+        { id, name: "", age: "", role: "Market", isNew: true },
+      ]);
+      setRowModesModel((oldModel) => ({
+        ...oldModel,
+        [id]: { mode: GridRowModes.Edit, fieldToFocus: "name" },
+      }));
+    };
+
+    return (
+      <GridToolbarContainer>
+        <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
+          Add record
+        </Button>
+      </GridToolbarContainer>
+    );
+  }
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -176,10 +176,13 @@ function CollapsibleTable() {
   };
   function renderCellDynamic(params) {
     const [isExpanded, setIsExpanded] = React.useState(false);
+
     function handleToggleIcon() {
-      console.log(params);
+      setIsExpanded(false);
+      // console.log(params);
+      console.log(isExpanded);
       setIsExpanded(!isExpanded);
-      console.log(params.hasFocus);
+      console.log(isExpanded);
     }
 
     return (
@@ -260,8 +263,8 @@ function CollapsibleTable() {
       headerName: "Department",
       width: 220,
       editable: true,
-      type: "singleSelect",
-      valueOptions: ["Market", "Finance", "Development"],
+      action: "actions",
+      valueOptions: ["Market", "Finance", "Development", "Admin"],
     },
     {
       field: "actions",
@@ -332,53 +335,78 @@ function CollapsibleTable() {
         />
       </Box> */}
 
-      <div
-        style={{
-          height: "100%",
-          width: "80%",
-          border: "2px solid white",
-          textAlign: "center",
-        }}
-      >
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          onCellClick={handleCellClick}
-          slots={{
-            toolbar: EditToolbar,
+      {isExpanded ? (
+        <div
+          style={{
+            height: "100%",
+            width: "80%",
+            border: "2px solid white",
+            textAlign: "center",
           }}
-          slotProps={{
-            toolbar: { setRows, setRowModesModel },
-          }}
-        />
-        <Modal
-          open={isModalOpen}
-          onClose={handleCloseModal}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
         >
-          <Box
-            sx={{
-              position: "absolute",
-              height: 20,
-              width: "50%",
-              top: "50%",
-              left: "50%",
-              bgcolor: "white",
-              transform: "translate(-50%, -50%)",
-              border: "solid 1px",
-              borderRadius: "10px",
-              boxShadow: 24,
-
-              p: 2,
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            onCellClick={handleCellClick}
+            slots={{
+              toolbar: EditToolbar,
             }}
-          >
-            <Chip label="Chip Filled" />
-            {/* <Button onClick={handleCloseModal}>Close</Button> */}
-          </Box>
-        </Modal>
-      </div>
+            slotProps={{
+              toolbar: { setRows, setRowModesModel },
+            }}
+          />
+        </div>
+      ) : (
+        <div
+          style={{
+            height: "100%",
+            width: "80%",
+            border: "2px solid white",
+            textAlign: "center",
+          }}
+        >
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            onCellClick={handleCellClick}
+            slots={{
+              toolbar: EditToolbar,
+            }}
+            slotProps={{
+              toolbar: { setRows, setRowModesModel },
+            }}
+          />
+        </div>
+      )}
     </>
   );
 }
 export default CollapsibleTable;
+{
+  /* <Modal
+open={isModalOpen}
+onClose={handleCloseModal}
+aria-labelledby="modal-modal-title"
+aria-describedby="modal-modal-description"
+>
+<Box
+  sx={{
+    position: "absolute",
+    height: 20,
+    width: "50%",
+    top: "50%",
+    left: "50%",
+    bgcolor: "white",
+    transform: "translate(-50%, -50%)",
+    border: "solid 1px",
+    borderRadius: "10px",
+    boxShadow: 24,
+
+    p: 2,
+  }}
+>
+  <Chip label="Chip Filled" />
+  {/* <Button onClick={handleCloseModal}>Close</Button> */
+}
+// </Box>
+// </Modal> */}
