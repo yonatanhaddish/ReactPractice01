@@ -15,13 +15,16 @@ function App() {
       {/* <Parent /> */}
       <br />
       <br />
-      <CollapsibleTable />
 
       {/* <FullFeaturedCrudGrid /> */}
 
       <br />
       <br />
       <CollapsibleTableTest></CollapsibleTableTest>
+      <br />
+      <br />
+      <br />
+      {/* <CollapsibleTable /> */}
     </>
   );
 }
