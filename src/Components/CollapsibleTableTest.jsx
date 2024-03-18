@@ -23,85 +23,64 @@ import Modal from "@mui/material/Modal";
 
 const rows = [
   {
-    id: 10,
+    id: Math.random() * (10000 - 1) + 1,
     mapping_type: "MappingTypeOne",
     mapping_id: "mappingIdOne",
     launch_name: "LaunchNameOne",
     role: "roleOne",
     history: [
       {
-        id: 100,
+        id: Math.random() * (10000 - 1) + 1,
         test_history: "RowOneTestOne",
       },
       {
-        id: 101,
+        id: Math.random() * (10000 - 1) + 1,
         test_history: "RowOneTestTwo",
       },
       {
-        id: 102,
+        id: Math.random() * (10000 - 1) + 1,
         test_history: "RowOneTestThree",
       },
     ],
   },
   {
-    id: 20,
+    id: Math.random() * (10000 - 1) + 1,
     mapping_type: "MappingTypeTwo",
     mapping_id: "mappingIdTwo",
     launch_name: "LaunchNameTwo",
     role: "roleTwo",
     history: [
       {
-        id: 200,
+        id: Math.random() * (10000 - 1) + 1,
         test_history: "RowOTwoTestOne",
       },
       {
-        id: 201,
+        id: Math.random() * (10000 - 1) + 1,
         test_history: "RowTwoTestTwo",
       },
       {
-        id: 202,
+        id: Math.random() * (10000 - 1) + 1,
         test_history: "RowTwoTestThree",
       },
     ],
   },
   {
-    id: 30,
+    id: Math.random() * (10000 - 1) + 1,
     mapping_type: "MappingTypeThree",
     mapping_id: "mappingIdThree",
     launch_name: "LaunchNameThree",
     role: "roleThree",
     history: [
       {
-        id: 300,
+        id: Math.random() * (10000 - 1) + 1,
         test_history: "RowThreeTestOne",
       },
       {
-        id: 301,
+        id: Math.random() * (10000 - 1) + 1,
         test_history: "RowThreeTestTwo",
       },
       {
-        id: 302,
-        test_history: "RowThreeTestThree",
-      },
-    ],
-  },
-  {
-    id: 40,
-    mapping_type: "MappingTypeThree",
-    mapping_id: "mappingIdThree",
-    launch_name: "LaunchNameThree",
-    role: "roleThree",
-    history: [
-      {
-        id: 300,
-        test_history: "RowThreeTestOne",
-      },
-      {
-        id: 301,
-        test_history: "RowThreeTestTwo",
-      },
-      {
-        id: 302,
+        id: Math.random() * (10000 - 1) + 1,
         test_history: "RowThreeTestThree",
       },
     ],
@@ -110,7 +89,9 @@ const rows = [
 
 function CollapsibleTableTest() {
   const [data, setData] = useState(rows);
-  const [openModal, setOpenModal] = useState(false);
+  const [dataEdited, setDataEdited] = useState({});
+  const [openAddRecordModal, setOpenAddRecordModal] = useState(false);
+  const [openEditRecordModal, setOpenEditRecordModal] = useState(false);
   const [idTable, setIdTable] = useState("");
   const [mappingType, setMappingType] = useState("");
   const [mappingId, setMappingId] = useState("");
@@ -166,28 +147,27 @@ function CollapsibleTableTest() {
     p: 4,
   };
   function addNewRecordModal() {
-    setOpenModal(true);
+    setOpenAddRecordModal(true);
+  }
+  function editRecordModal() {
+    setOpenEditRecordModal(true);
+    console.log();
   }
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => {
-    setOpenModal(false);
+    setOpenAddRecordModal(false);
+    setOpenEditRecordModal(false);
     setIdTable("");
     setMappingType("");
     setMappingId("");
     setLaunchName("");
     setDepartmentName("");
   };
-  function handleTest() {
-    console.log(idTable);
-    console.log(mappingType);
-    console.log(mappingId);
-    console.log(launchName);
-    console.log(departmentName);
-
+  function handleSaveNewRecord() {
     setData([
       ...data,
       {
-        id: idTable,
+        id: Math.random() * (10000 - 1) + 1,
         mapping_type: mappingType,
         mapping_id: mappingId,
         launch_name: launchName,
@@ -214,15 +194,69 @@ function CollapsibleTableTest() {
     setMappingId("");
     setLaunchName("");
     setDepartmentName("");
+    console.log(data.history);
+  }
+  function handleSaveSelectedEdit() {
+    console.log(data);
+    console.log(idTable);
+    let selectedRow = [];
+
+    // setMappingType(mappingType);
+    // setMappingId(mappingId);
+    // setDepartmentName(departmentName);
+    // setDataEdited([
+    //   ...selectedRow,
+    //   {
+    //     id: idTable,
+    //     mapping_type: mappingType,
+    //     mapping_id: mappingId,
+    //     role: departmentName,
+    //   },
+    // ]);
+    selectedRow = data.find((e) => e.id === idTable);
+    let updatedRow = data.filter((d) => d.id !== idTable);
+
+    console.log(selectedRow);
+
+    console.log(dataEdited);
+    updatedRow.push(selectedRow);
+
+    console.log(selectedRow);
+    console.log(updatedRow);
+
+    // setMappingType(mappingType);
+    // setLaunchName(launchName);
+    // setDepartmentName(departmentName);
+
+    // setData([
+    //   ...data,
+    //   {
+    //     id: idTable,
+    //     mapping_type: mappingType,
+    //     mapping_id: mappingId,
+    //     launch_name: launchName,
+    //     role: departmentName,
+    //   },
+    // ]);
+    // console.log(data);
   }
 
-  function Row({ row }) {
+  function Row({ row, editedRow }) {
     const [open, setOpen] = useState(false);
     function handleIconToggle(params) {
       setOpen(!open);
     }
     function handleEditRow() {
-      console.log(row.id);
+      editRecordModal(true);
+      const editedRow = row;
+
+      setDataEdited(editedRow);
+      console.log(editedRow);
+      setIdTable(editedRow.id);
+      setMappingType(editedRow.mapping_type);
+      setMappingId(editedRow.mapping_id);
+      setLaunchName(editedRow.launch_name);
+      setDepartmentName(editedRow.role);
     }
 
     return (
@@ -247,8 +281,8 @@ function CollapsibleTableTest() {
         <TableRow>
           <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
-              <Box>
-                <Paper>
+              <Box key={row.id}>
+                <Paper key={row.id} sx={{ height: 50 }}>
                   {row.history.map((rowHistory) => (
                     <Chip label={rowHistory.test_history} key={rowHistory.id} />
                   ))}
@@ -286,7 +320,7 @@ function CollapsibleTableTest() {
         </Table>
       </TableContainer>
       <Modal
-        open={openModal}
+        open={openAddRecordModal}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -367,7 +401,102 @@ function CollapsibleTableTest() {
                 </TableRow>
                 <TableRow>
                   <TableCell align="right" sx={{ borderBottomColor: "green" }}>
-                    <Button onClick={handleTest}>Save</Button>
+                    <Button onClick={handleSaveNewRecord}>Save</Button>
+                  </TableCell>
+                  <TableCell align="left" sx={{ borderBottomColor: "green" }}>
+                    <Button onClick={handleClose}>Cancel</Button>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Modal>
+      <Modal
+        open={openEditRecordModal}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ borderBottomColor: "green" }}>
+                    <Typography>Edit Record</Typography>
+                  </TableCell>
+                  <TableCell sx={{ borderBottomColor: "green" }} />
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell>
+                    <TextField
+                      disabled
+                      id="outlined-basic"
+                      label="ID"
+                      variant="outlined"
+                      value={idTable}
+                      onChange={(event) => {
+                        setIdTable(event.target.value);
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      id="outlined-basic"
+                      // label={mappingType}
+                      variant="outlined"
+                      value={mappingType}
+                      onChange={(event) => {
+                        setMappingType(event.target.value);
+                      }}
+                    />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <TextField
+                      disabled
+                      id="outlined-basic"
+                      label="Mapping ID"
+                      variant="outlined"
+                      value={mappingId}
+                      onChange={(event) => {
+                        setMappingId(event.target.value);
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <TextField
+                      id="outlined-basic"
+                      label="Launch Name"
+                      variant="outlined"
+                      value={launchName}
+                      onChange={(event) => {
+                        setLaunchName(event.target.value);
+                      }}
+                    />
+                  </TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell sx={{ borderBottomColor: "green" }}>
+                    <TextField
+                      id="outlined-basic"
+                      label="Department"
+                      variant="outlined"
+                      value={departmentName}
+                      onChange={(event) => {
+                        setDepartmentName(event.target.value);
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell sx={{ borderBottomColor: "green" }} />
+                </TableRow>
+                <TableRow>
+                  <TableCell align="right" sx={{ borderBottomColor: "green" }}>
+                    <Button onClick={handleSaveSelectedEdit}>Save</Button>
                   </TableCell>
                   <TableCell align="left" sx={{ borderBottomColor: "green" }}>
                     <Button onClick={handleClose}>Cancel</Button>
