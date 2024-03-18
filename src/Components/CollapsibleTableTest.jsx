@@ -151,7 +151,8 @@ function CollapsibleTableTest() {
   }
   function editRecordModal() {
     setOpenEditRecordModal(true);
-    console.log();
+    setIdTable(idTable);
+    console.log(idTable);
   }
   const handleOpen = () => setOpenModal(true);
   const handleClose = () => {
@@ -197,48 +198,13 @@ function CollapsibleTableTest() {
     console.log(data.history);
   }
   function handleSaveSelectedEdit() {
-    console.log(data);
-    console.log(idTable);
-    let selectedRow = [];
-
-    // setMappingType(mappingType);
-    // setMappingId(mappingId);
-    // setDepartmentName(departmentName);
-    // setDataEdited([
-    //   ...selectedRow,
-    //   {
-    //     id: idTable,
-    //     mapping_type: mappingType,
-    //     mapping_id: mappingId,
-    //     role: departmentName,
-    //   },
-    // ]);
-    selectedRow = data.find((e) => e.id === idTable);
+    let dataEdited = data.find((e) => e.id === idTable);
     let updatedRow = data.filter((d) => d.id !== idTable);
 
-    console.log(selectedRow);
-
     console.log(dataEdited);
-    updatedRow.push(selectedRow);
-
-    console.log(selectedRow);
-    console.log(updatedRow);
-
-    // setMappingType(mappingType);
-    // setLaunchName(launchName);
-    // setDepartmentName(departmentName);
-
-    // setData([
-    //   ...data,
-    //   {
-    //     id: idTable,
-    //     mapping_type: mappingType,
-    //     mapping_id: mappingId,
-    //     launch_name: launchName,
-    //     role: departmentName,
-    //   },
-    // ]);
-    // console.log(data);
+    setMappingType(dataEdited.mapping_type);
+    setLaunchName(dataEdited.launch_name);
+    setDepartmentName(dataEdited.role);
   }
 
   function Row({ row, editedRow }) {
